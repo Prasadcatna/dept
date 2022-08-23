@@ -28,6 +28,7 @@ int addProduct();
 void display();
 void search();
 void close_app();
+void delete();
 void saleProduct();
 
 int len_item;
@@ -129,19 +130,38 @@ void search(){
 	}
 }
 
+void delete(){
+	int i,max=len_item;
+	char x[MAX];
+	printf("Enter the code to be deleted: ");
+	scanf("%s",x);
+	
+	for(i=0;i<max;i++){
+		if(strcmp(x,ids[i].product_code) == 0)
+			break;
+		else
+			printf("There is no record\n");
+	}
+	for(;i<max;i++)
+		ids[i] = ids[i+1];
+
+	max--;
+
+	printf("\t\tSuccessfully deleted\n");
+}
+
 void saleProduct(){
 	printf("\t\tSale Product\n");
 	char x[MAX];
 	int q=0, size=0,i=1,j,k;
 	float total = 0, gtotal =0;
-
 	printf("\t\tEnter \"end\" to back to manu\n");
+
 	for(j=0;i<LNUM;j++){
-		int qty = ids[i].quantity;
+		int qty = ids[j].quantity;
 		printf("%d", qty);
 
 		while(1){
-
 		printf("\t\tENter Item code: ");
 
 		scanf("%s", x);
@@ -149,7 +169,7 @@ void saleProduct(){
 			system("clear");
 			break;
 		}
-		if(strcmp(x,ids[i].product_code) != 0){
+		if(strcmp(x,ids[j].product_code) == 1){
 			printf("No Product is found\n");
 			option();
 		}
@@ -164,14 +184,14 @@ void saleProduct(){
 			break;
 		}
 		if(strcmp(ids[i].product_code, x) == 0){
-			total = ids[i].rate * q;
+			total = ids[j].rate * q;
 			printf("\n\t\t%d", i);
-			printf("\t\t%s", ids[i].product_name);
-			printf("\t\t%.2f",ids[i].rate);
+			printf("\t\t%s", ids[j].product_name);
+			printf("\t\t%.2f",ids[j].rate);
 			printf("\t\t%d",q);
 			printf("\t\t%.2f",total);
 			gtotal+=total;
-			ids[i].quantity-=q;
+			ids[j].quantity-=q;
 
 			i++;
 			break;
@@ -180,7 +200,8 @@ void saleProduct(){
 	}
 	if(gtotal != 0)
 		printf("\n\t\tTOTAL AMOUNT = Rs. %.2f", gtotal);
-}
+	}
+
 }
 
 void close_app(){
@@ -213,7 +234,11 @@ void option(){
 			search();
 			break;
 		}
-		else if(ch == 4){}
+		else if(ch == 4){
+			system("clear");
+			delete();
+			break;
+		}
 		else if(ch == 5){
 			system("clear");
 			close_app();
